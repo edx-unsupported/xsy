@@ -4,6 +4,8 @@ python:
 # command to install dependencies
 install:
   - "pip install -r requirements.txt"
+# Test script to run
+script: ./will/scripts/test_run.sh
 deploy:
   provider: heroku
   api_key:
