@@ -9,7 +9,7 @@ class TeamPlugin(WillPlugin):
     def send_to_team(self, message,before,after):
         channel = self.get_room_from_message(message)['name']
         notification_list = self.load("team_" + channel, None)
-        if notification_list:
+        if notification_list and message.sender:
             self.say("{} said: {}team{} ({})".format(message.sender.nick, before, after, ' '.join('@'+user for user in notification_list)), room=self.get_room_from_message(message), notify=True)
 
     @respond_to("^add (@?)(?P<user>\S+) to (?:this) team")
@@ -24,6 +24,17 @@ class TeamPlugin(WillPlugin):
         if not notification_list:
             notification_list = []
         notification_list.append(user)
+        notification_list = list(set(notification_list))
+        self.save('team_' + channel, notification_list)
+        self.reply(message, "team for {} is now: {}".format(channel, ', '.join(user for user in notification_list)))
+
+    @respond_to("^set team to (?P<users>(.*))")
+    def set_team(self, message, users):
+        """
+        set team to user, user, user: bulk update the whole team
+        """
+        channel = self.get_room_from_message(message)['name']
+        notification_list = [u.replace('@', '').replace(',', '') for u in users.split(' ')]
         notification_list = list(set(notification_list))
         self.save('team_' + channel, notification_list)
         self.reply(message, "team for {} is now: {}".format(channel, ', '.join(user for user in notification_list)))
