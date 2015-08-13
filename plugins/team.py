@@ -12,7 +12,7 @@ class TeamPlugin(WillPlugin):
         if notification_list and message.sender:
             self.say("{} said: {}team{} ({})".format(message.sender.nick, before, after, ' '.join('@'+user for user in notification_list)), room=self.get_room_from_message(message), notify=True)
 
-    @respond_to("^add (@?)(?P<user>\S+) to (?:this )team")
+    @respond_to("^add (@?)(?P<user>\S+) to (this )?team")
     def add_to_team(self, message, user):
         """
         add [user] to this team: request to be notified when someone mentions team
@@ -28,7 +28,7 @@ class TeamPlugin(WillPlugin):
         self.save('team_' + channel, notification_list)
         self.reply(message, "team for {} is now: {}".format(channel, ', '.join(user for user in notification_list)))
 
-    @respond_to("^set (?:this )team to (?P<users>(.*))")
+    @respond_to("^set (this )?team to (?P<users>(.*))")
     def set_team(self, message, users):
         """
         set team to user, user, user: bulk update the whole team
@@ -39,7 +39,7 @@ class TeamPlugin(WillPlugin):
         self.save('team_' + channel, notification_list)
         self.reply(message, "team for {} is now: {}".format(channel, ', '.join(user for user in notification_list)))
 
-    @respond_to("^remove (@?)(?P<user>\S+) from this team")
+    @respond_to("^remove (@?)(?P<user>\S+) from (this )?team")
     def remove_from_team(self, message, user):
         """
         remove [user] from this team: remove a person from this team
@@ -55,7 +55,7 @@ class TeamPlugin(WillPlugin):
         self.save('team_' + channel, notification_list)
         self.reply(message, "team for {} is now: {}".format(channel, ', '.join(user for user in notification_list)))
 
-    @respond_to("^who is on (?:this )team")
+    @respond_to("^who is on (this )?team")
     def check_team(self, message):
         """
         who is on this team: see the notification list for a token
