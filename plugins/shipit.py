@@ -23,4 +23,14 @@ class ShipitPlugin(WillPlugin):
                   "https://dl.dropboxusercontent.com/u/602885/github/squirrelmobster.jpeg",
                 ]
         self.say(random.choice(squirrels), room=self.get_room_from_message(message)) 
+        squirrel_count = self.load("squirrels", 0)
+        squirrel_count += 1
+        self.save('squirrels', squirrel_count)
+
+
+    @respond_to("^how many squirrels")
+    def howmanysquirrels(self, message):
+        squirrel_count = self.load("squirrels", 0)
+        self.reply(message, "squirrels = " + str(squirrel_count))
+    
     

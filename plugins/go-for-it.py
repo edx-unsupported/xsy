@@ -31,5 +31,13 @@ class GopherPlugin(WillPlugin):
           'http://farm3.staticflickr.com/2268/1992861119_88028372b1_o.jpg',
           'http://www.zerotocruising.com/wp-content/uploads/2013/04/groundhog.jpg'
         ]
-        self.say(random.choice(gophers), room=self.get_room_from_message(message)) 
-    
+        self.say(random.choice(gophers), room=self.get_room_from_message(message))  
+        gopher_count = self.load("gophers", 0)
+        gopher_count += 1
+        self.save('gophers', gopher_count)
+
+
+    @respond_to("^how many gophers")
+    def howmanygophers(self, message):
+        gopher_count = self.load("gophers", 0)
+        self.reply(message, "gophers = " + str(gopher_count))
