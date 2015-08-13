@@ -3,7 +3,7 @@ from will.decorators import respond_to, periodic, hear, randomly, route, rendere
 import random
 
 
-class HelloPlugin(WillPlugin):
+class ShipitPlugin(WillPlugin):
 
     @hear("ship(ping|z|s|ped)?\s*it")
     def shipit(self, message):
