@@ -58,7 +58,7 @@ class TeamPlugin(WillPlugin):
     @respond_to("^who is on (this )?team")
     def check_team(self, message):
         """
-        who is on this team: see the notification list for a token
+        who is on this team: see who is on the team for this room.
         """
         channel = self.get_room_from_message(message)['name']
         notification_list = self.load("team_" + channel, None)
