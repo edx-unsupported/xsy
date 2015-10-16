@@ -15,11 +15,11 @@ class HousePointsPlugin(WillPlugin):
         housepoints = self.load("housepoints", None)
         if not housepoints:
             housepoints = {}
-            housepoints[housename] = 0
+        current_points = housepoints.get(housename,0)
         if operator == "to":
-            housepoints[housename] = housepoints[housename] + int(points)
+            housepoints[housename] = current_points + int(points)
         else:
-            housepoints[housename] = housepoints[housename] - int(points)
+            housepoints[housename] = current_points - int(points)
         self.save('housepoints', housepoints)
         self.reply(message, "{} now has {} points!".format(housename, housepoints[housename]))
 
