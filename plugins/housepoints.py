@@ -5,7 +5,7 @@ import pprint
 
 class HousePointsPlugin(WillPlugin):
 
-  @hear("(?P<points>\d*) points (?P<operator>(to|from)) (?P<housename>.*)")
+  @hear("(?P<points>\d*) points (?P<operator>(to|from)) @?(?P<housename>.*)")
   def give_points(self, message, points, operator, housename):
         """
         [number] points to|from [house]: grant points to a house
@@ -20,8 +20,10 @@ class HousePointsPlugin(WillPlugin):
             housepoints[housename] = current_points + int(points)
         else:
             housepoints[housename] = current_points - int(points)
-        self.save('housepoints', housepoints)
         self.reply(message, "{} now has {} points!".format(housename, housepoints[housename]))
+        if housepoints[housename] == 0:
+            del housepoints[housename]
+        self.save('housepoints', housepoints)
 
   @respond_to("^what are the house points?")
   def check_points(self, message):
