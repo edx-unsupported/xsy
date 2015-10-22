@@ -1,5 +1,6 @@
 from will.plugin import WillPlugin
 from will.decorators import respond_to, periodic, hear, randomly, route, rendered_template, require_settings
+from will.mixins.room import Room
 from datetime import datetime, timedelta
 import random
 
@@ -26,7 +27,10 @@ class MakeItSoPlugin(WillPlugin):
         beer = u'http://i.imgur.com/YYrVe6s.jpg'
         snow = u'http://i.ytimg.com/vi/KeaehxEdpgo/hqdefault.jpg'
 
-        room = self.get_room_from_message(message)
+        # Wrap the room in an extra instance of Room(), to work around an issue with
+        # getting rooms through v1 of the API. (See https://github.com/skoczen/will/pull/193
+        # for resolution of this issue upstream).
+        room = Room(**self.get_room_from_message(message))
         if room.history[0][u'date'] < room.history[-1][u'date']:
             history = reversed(room.history)
         else:
