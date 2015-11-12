@@ -30,7 +30,10 @@ class MakeItSoPlugin(WillPlugin):
         # Wrap the room in an extra instance of Room(), to work around an issue with
         # getting rooms through v1 of the API. (See https://github.com/skoczen/will/pull/193
         # for resolution of this issue upstream).
-        room = Room(**self.get_room_from_message(message))
+        if 'id' not in room:
+            # v1 API calls the id "room_id", but room.history depends on room['id']
+            # This may also get resolved with https://github.com/skoczen/will/pull/193
+            room['id'] = room['room_id']
         if room.history[0][u'date'] < room.history[-1][u'date']:
             history = reversed(room.history)
         else:
